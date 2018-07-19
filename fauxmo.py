@@ -26,8 +26,7 @@ THE SOFTWARE.
 
 # For a complete discussion, see http://www.makermusings.com
 
-import email.utils
-import requests
+#import requests
 import select
 import socket
 import struct
@@ -35,6 +34,8 @@ import sys
 import time
 import urllib
 import uuid
+#import email.utils
+from email.utils import formatdate
 from device import executeCommand
 
 
@@ -174,7 +175,7 @@ class upnp_device(object):
         
     def respond_to_search(self, destination, search_target):
         dbg("Responding to search for %s" % self.get_name())
-        date_str = email.utils.formatdate(timeval=None, localtime=False, usegmt=True)
+        date_str = formatdate(timeval=None, localtime=False, usegmt=True)
         location_url = self.root_url % {'ip_address' : self.ip_address, 'port' : self.port}
         message = ("HTTP/1.1 200 OK\r\n"
                   "CACHE-CONTROL: max-age=86400\r\n"
@@ -221,7 +222,7 @@ class fauxmo(upnp_device):
         if data.find('GET /setup.xml HTTP/1.1') == 0:
             dbg("Responding to setup.xml for %s" % self.name)
             xml = SETUP_XML % {'device_name' : self.name, 'device_serial' : self.serial}
-            date_str = email.utils.formatdate(timeval=None, localtime=False, usegmt=True)
+            date_str = formatdate(timeval=None, localtime=False, usegmt=True)
             message = ("HTTP/1.1 200 OK\r\n"
                        "CONTENT-LENGTH: %d\r\n"
                        "CONTENT-TYPE: text/xml\r\n"
@@ -250,7 +251,7 @@ class fauxmo(upnp_device):
                 # The echo is happy with the 200 status code and doesn't
                 # appear to care about the SOAP response body
                 soap = ""
-                date_str = email.utils.formatdate(timeval=None, localtime=False, usegmt=True)
+                date_str = formatdate(timeval=None, localtime=False, usegmt=True)
                 message = ("HTTP/1.1 200 OK\r\n"
                            "CONTENT-LENGTH: %d\r\n"
                            "CONTENT-TYPE: text/xml charset=\"utf-8\"\r\n"
@@ -369,13 +370,13 @@ class command_handler(object):
     def on(self):
         #r = requests.get(self.on_cmd)
         executeCommand("on", self.address, self.mac)
-        print ("Executing ON command action")
+        #print ("Executing ON command action")
         return True
 
     def off(self):
         #r = requests.get(self.off_cmd)
         executeCommand("off", self.address, self.mac)
-        print ("Executing OFF command action")
+        #print ("Executing OFF command action")
         return True
 
 
