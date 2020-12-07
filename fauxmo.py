@@ -366,7 +366,7 @@ class tasmota_handler(object):
     def __init__(self, address):
         self.address = address
         self.on_cmd = address + "/cm?cmnd=Power%20On"
-        self.off_cmd = "http://" + address + "/cm?cmnd=Power%20Off"
+        self.off_cmd = address + "/cm?cmnd=Power%20Off"
 
     def on(self):
         requests.get(self.on_cmd)
@@ -407,7 +407,7 @@ class orvibo_handler(object):
 FAUXMOS = [
     # This is out of date - may not even be connected to the network or at least not to that adress
     ['Dining room light', orvibo_handler('192.168.1.21', 'AC:CF:23:8D:AA:42')],
-    
+
     ['Tree lights', tasmota_handler('192.168.1.72')]
 ]
 
