@@ -26,7 +26,7 @@ THE SOFTWARE.
 
 # For a complete discussion, see http://www.makermusings.com
 
-#import requests
+import requests
 import select
 import socket
 import struct
@@ -362,19 +362,33 @@ class upnp_broadcast_responder(object):
 # This example class takes two full URLs that should be requested when an on
 # and off command are invoked respectively. It ignores any return data.
 
-class command_handler(object):
+class tasmota_handler(object):
+    def __init__(self, address):
+        self.address = address
+        self.on_cmd = address + "/cm?cmnd=Power%20On"
+        self.off_cmd = "http://" + address + "/cm?cmnd=Power%20Off"
+
+    def on(self):
+        requests.get(self.on_cmd)
+        #print ("Executing ON command action")
+        return True
+
+    def off(self):
+        requests.get(self.off_cmd)
+        #print ("Executing OFF command action")
+        return True
+
+class orvibo_handler(object):
     def __init__(self, address, mac):
         self.address = address
         self.mac = mac
 
     def on(self):
-        #r = requests.get(self.on_cmd)
         executeCommand("on", self.address, self.mac)
         #print ("Executing ON command action")
         return True
 
     def off(self):
-        #r = requests.get(self.off_cmd)
         executeCommand("off", self.address, self.mac)
         #print ("Executing OFF command action")
         return True
@@ -391,7 +405,10 @@ class command_handler(object):
 # list will be used.
 
 FAUXMOS = [
-    ['Dining room light', command_handler('192.168.1.21', 'AC:CF:23:8D:AA:42')]
+    # This is out of date - may not even be connected to the network or at least not to that adress
+    ['Dining room light', orvibo_handler('192.168.1.21', 'AC:CF:23:8D:AA:42')],
+    
+    ['Tree lights', tasmota_handler('192.168.1.72')]
 ]
 
 
